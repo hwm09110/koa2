@@ -1,12 +1,12 @@
 const fs = require('fs');
+const path = require('path');
 const Router = require('koa-router');
 const multer = require('koa-multer');
 const mysql = require('../mysql').client;
 const router = new Router();
 
-const { writeJson } = require('../utils/writejson.js');
+const { writeJson, readJson } = require('../utils/writejson.js');
 
-console.log(writeJson);
 
 //文件上传 
 //配置 
@@ -97,19 +97,14 @@ router.post('/postinfo',async (ctx,next)=>{
 })
 
 
-router.get('/writejson',async (ctx,next)=>{
-  let query = ctx.query;
-  var params = { "id":5, "name":"白眉鹰王" };
-  writeJson(params);
-  let json = {
-    'code': 200,
-    'message': '获取成功',
-    'extraData':[
-      {'name':'张三','age':23},
-      {'name':'李四','age':25},
-      {'name':'王五','age':20}
-    ]
-  }
+router.get('/readjson',async (ctx,next)=>{
+  // let query = ctx.query;
+  // var params = { "id":5, "name":"白眉鹰王" };
+  // writeJson(params);
+  let filePath = path.resolve(__dirname, '../mock/person.json');
+  // console.log(filePath);
+  let json = await readJson(filePath);
+  // console.log(json);
   ctx.body = json
 })
 
